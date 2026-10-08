@@ -113,7 +113,9 @@ useEffect(()=>{
 
         
         {/*Right Panel-Preview*/}
-        <div></div>
+        <div className='className="lg:col-span-7 max-lg:mt-6"'>
+
+        </div>
       </div>
     </div>
   </>
