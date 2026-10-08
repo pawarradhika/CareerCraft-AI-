@@ -2,11 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { dummyResumeData } from '../assets/assets'
 import { Link } from 'react-router-dom'
-import { ArrowLeftIcon, Briefcase, GraduationCap, User } from 'lucide-react'
+
+import {
+  ArrowLeftIcon,
+  Briefcase,
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  Folder,
+  GraduationCap,
+  Sparkles,
+  User,
+} from 'lucide-react'
+import PersonalInfoForm from '../components/PersonalInfoForm'
 
 const ResumeBuilder = () => {
 
   const  {resumeId} = useParams()
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0)
+  const [removeBackground, setRemoveBackground] = useState(false)
 
 const [resumeData, setResumeData] = useState({
 _id: '',
@@ -35,7 +49,7 @@ const sections = [
   {id:"summary", name: "Summary", icon: FileText},
   {id:"experience", name: "Experience", icon: Briefcase},
   {id:"education", name: "Education", icon: GraduationCap},
-  {id:"projects", name: "Projects", icon: FolderIcon},
+  {id:"projects", name: "Projects", icon: Folder},
   {id:"skills", name: "Skills", icon: Sparkles},
 ]
 
@@ -72,14 +86,14 @@ useEffect(()=>{
                   <button onClick={()=>{setActiveSectionIndex((prevIndex)=>Math.max(prevIndex - 1, 0))
 
                   }} className='flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all disabled={activeSectionIndex ===0}'>
-                    <ChevonLeft className='size-4' />
+                    <ChevronLeft className='size-4' />
                   Previous</button>
                 )}
 
                  <button onClick={()=>{setActiveSectionIndex((prevIndex)=>Math.min(prevIndex + 1, sections.length -1))
 
                   }} className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all ${activeSectionIndex ===sections.length - 1 && 'opacity-50'}`}disabled={activeSectionIndex === sections.length - 1}>
-                 Next   <ChevonRight className='size-4' />
+                 Next   <ChevronRight className='size-4' />
                 </button>
               </div>
 <div>
@@ -88,7 +102,8 @@ useEffect(()=>{
 
 <div className='space-y-6'>
     {activeSection.id === 'personal' && (
-      <div></div>
+      <PersonalInfoForm data={resumeData.personal_info} onChange={(data)=>setResumeData(prev => ({...prev, personal_info: data}))} removeBackground={removeBackground} 
+      setRemoveBackground={setRemoveBackground}/>
     )}
   </div>
 </div>
