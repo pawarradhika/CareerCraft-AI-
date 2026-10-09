@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import PersonalInfoForm from '../components/PersonalInfoForm'
 import ResumePreview from '../components/ResumePreview'
+import TemplateSelector from '../components/TemplateSelector'
 
 const ResumeBuilder = () => {
 
@@ -81,7 +82,10 @@ useEffect(()=>{
             <hr className='absolute top-0 left-0 h-1 bg-gradient-to-r from-green-500 to-green-600 border-none transition-all duration-2000' style={{width:`${activeSectionIndex * 100 / (sections.length -1)}%`}}/>
 
             <div className='flex justify-between items-center mb-6 border-b border-gray-300 py-1'>
-              <div></div>
+              <div className='flex justify-center items-center gap-2'>
+
+                <TemplateSelector selectedTemplate={resumeData.template} onChange={()=> setResumeData(prev => ({...prev, template}))}/>
+              </div>
               <div className='flex items-center'>
                 {activeSectionIndex !== 0 && (
                   <button onClick={()=>{setActiveSectionIndex((prevIndex)=>Math.max(prevIndex - 1, 0))
