@@ -132,6 +132,10 @@ useEffect(()=>{
       activeSection.id === 'projects' && (
     <ProjectForm data={resumeData.project} onChange={(data)=> setResumeData(prev=> ({...prev, project: data}))}  />
       )}
+       {
+      activeSection.id === 'skills' && (
+    <SkillsForm data={resumeData.skills} onChange={(data)=> setResumeData(prev=> ({...prev, skills: data}))}  />
+      )}
       
   </div>
 </div>

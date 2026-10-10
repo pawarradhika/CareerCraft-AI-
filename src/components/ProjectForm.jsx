@@ -44,7 +44,7 @@ onChange(updated)
   </button>
   </div>
 
-<div className='grid md:grid-cols-2 gap-3'>
+<div className='grid gap-3'>
 
   <input value={project.name || ""} onChange={(e)=>updateProject(index, "name", e.target.value)} type="text" placeholder='Project Name' className='px-3 py-2 text-sm rounded-lg'/>
 
