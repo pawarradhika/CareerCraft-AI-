@@ -33,7 +33,7 @@ const ColorPicker = ({ selectedColor, onChange }) => {
             <div
               key={color.value}
               className='relative cursor-pointer group flex flex-col'
-              onClick={() => onChange(color.value)}
+              onClick={() => {onChange(color.value); setIsOpen(false)}}
             >
               <div
                 className={'w-12 h-12 rounded-full border-2 border-transparent group-hover:border-black/25 transition-colors'}
@@ -45,6 +45,7 @@ const ColorPicker = ({ selectedColor, onChange }) => {
                   <Check className='size-5 text-white' />
                 </div>
               )}
+              <p className='text-xs text-center mt-1 text-gray-600'>{color.name}</p>
             </div>
           ))}
         </div>
