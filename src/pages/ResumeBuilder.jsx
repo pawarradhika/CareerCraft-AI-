@@ -25,6 +25,11 @@ import TemplateSelector from '../components/TemplateSelector'
 import ColorPicker from '../components/ColorPicker'
 import ProfessionalSummaryForm from '../components/ProfessionalSummaryForm'
 import ExperienceForm from '../components/ExperienceForm'
+import EducationForm from '../components/EducationForm'
+import ProjectForm from '../components/ProjectForm'
+import SkillsForm from '../components/SkillsForm'
+
+
 
 const ResumeBuilder = () => {
 

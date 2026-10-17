@@ -39,7 +39,7 @@ onChange(updated)
 
       {data.length === 0 ? (
         <div className='text-center py-8 text-gray-500'>
-          <GreaduationCap className='w-12 h-12 mx-auto mb-3 text-gray-300'/>
+          <GraduationCap className='w-12 h-12 mx-auto mb-3 text-gray-300'/>
 <p>No education added yet.</p>
 <p className='text-sm'> Click "Add Education" to get started.</p>
         </div>
@@ -76,4 +76,3 @@ onChange(updated)
 }
 
 export default EducationForm
-

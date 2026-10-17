@@ -1,4 +1,4 @@
-import { Sparkle } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import React from 'react'
 
 const ProfessionalSummaryForm = ({data, onChange, setResumeData}) => {
