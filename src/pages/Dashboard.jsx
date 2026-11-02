@@ -1,10 +1,16 @@
-import { PencilIcon, PlusIcon, TrashIcon, UploadCloudIcon, XIcon, FilePenLineIcon, UploadCloud } from 'lucide-react'
+import { PencilIcon, PlusIcon, TrashIcon, UploadCloudIcon, XIcon, FilePenLineIcon, UploadCloud, LoaderCircleIcon } from 'lucide-react'
 import { useState } from 'react'
 import { dummyResumeData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
+import api from '../configs/api'
+import { useSelector } from 'react-redux'
+import toast from 'react-hot-toast'
+import pdfToText from 'react-pdfto-text'
 
 
 const Dashboard = () => {
+
+  const { user, token } = useSelector(state => state.auth)
 
 const colors =["#9333ea", "#d97706", "#dc2626", "#0284c7", "#16a34a"]
 const [allResumes, setAllResumes] = useState(dummyResumeData)
@@ -14,38 +20,92 @@ const [title, setTitle] = useState('')
 const [resume, setResume] = useState(null)
 const [editResumeId, setEditResumeId] = useState('')
 
+const [isLoading, setIsLoading] = useState(false)
+
 const navigate = useNavigate()
 
+const loadAllResumes = async () => {
+try {
+  const {data} = await api.get('/api/users/resumes', {headers: {Authorization: token}})
+  setAllResumes(data.resumes)
+} catch (error) {
+  toast.error(error?.response?.data?.message || error.message)
+}
+}
+
 const createResume = async (event) =>{
-  event.preventDefault()
-  setShowCreateResume(false)
-  navigate(`/app/builder/res123`)
+  try {
+    event.preventDefault()
+    const { data } = await api.post('/api/resumes/create', {title}, {
+      headers: {
+        Authorization: token}})
+    setAllResumes([...allResumes, data.resume])
+    setTitle('')
+    setShowCreateResume(false)
+    navigate(`/app/builder/${data.resume._id}`)
+  }
+  catch (error) {
+    toast.error(error?.response?.data?.message || error.message)
+  }
+ 
 }
 
 const uploadResume = async (event) => {
   event.preventDefault()
-  setShowUploadResume(false)
-  navigate('/app/builder/res123')
+  setIsLoading(true)
+  try {
+    const resumeText = await pdfToText(resume)
+    const { data } = await api.post('/api/ai/upload-resume', {title, resumeText}, {
+      headers: {
+        Authorization: token} })
+        setTitle('')
+    setResume(null)
+    setShowUploadResume(false)
+    navigate(`/app/builder/${data.resume._id}`)
+  } catch (error) {
+toast.error(error?.response?.data?.message || error.message)
+  }
+  setIsLoading(false)
 }
 
-const editTitle = (event) => {
-  event.preventDefault()
-  setAllResumes(currentResumes =>
-    currentResumes.map(resume =>
-      resume._id === editResumeId ? { ...resume, title } : resume
-    )
-  )
+const editTitle = async (event) => {
+  try {
+ event.preventDefault()
+  const { data } = await api.put(`/api/resumes/update`, {resumeId: editResumeId, resumeData: { title}}, {headers: {Authorization: token}}) 
+setAllResumes(allResumes.map(resume =>
+  resume._id === editResumeId ? { ...resume, title } : resume
+))
+ setTitle('')
   setEditResumeId('')
-  setTitle('')
+  toast.success(data.message)
+ 
+} catch (error) {
+  toast.error(error?.response?.data?.message || error.message)
 }
+}
+    
+  
+
 
 const deleteResume = async (resumeId) => {
-  const confirm = window.confirm('Are you sure want t delete this resume?')
+  try {
+const confirm = window.confirm('Are you sure want t delete this resume?')
   if(confirm){
-    setAllResumes(prev => prev.filter(resume => resume._id !==resumeId))
+    const { data } = await api.delete(`/api/resumes/${resumeId}`, 
+      {
+      headers: {
+        Authorization: token}})
+    setAllResumes(allResumes.filter(resume => resume._id !== resumeId))
+    toast.success(data.message)
+  }
+  
+  } catch (error) {
+    toast.error(error?.response?.data?.message || error.message)
   }
 }
-
+ useEffect(() => {
+  loadAllResumes()
+ }, [])
 
   return (
     <div className='bg-slate-50'>
@@ -172,7 +232,8 @@ showUploadResume && (
   />
 </div>
               <button className='w-full py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors'>
-                Upload Resume
+                {isLoading && <LoaderCircleIcon className='animate-spin size-4 text-white'/>}
+                {isLoading ? 'Uploading...' : 'Upload Resume'}
               </button>
               <XIcon
                 className='absolute top-4 right-4 text-slate-400 hover:text-slate-600 cursor-pointer transition-colors'
