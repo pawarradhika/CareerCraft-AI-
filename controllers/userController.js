@@ -27,7 +27,7 @@ if(user){
   name, email, password: hashedPassword
  })
 
- const token = generatedToken(newUser._id)
+ const token = generateToken(newUser._id)
  newUser.password = undefined;
 
  return res.status(201).json({message: 'User created successfully', token, user: newUser})
