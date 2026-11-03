@@ -82,7 +82,7 @@ export const updateResume = async (req, res) => {
 const {resumeId, resuemData, removeBackground} = req.body
 const image = req.file;
 
-let resumeDataCopy = JSON.parse(resuemData);
+let resumeDataCopy = JSON.parse(JSON.stringify(resuemData));
 
  const resume = await Resume.findByIdAndUpdate({userId, _id: resumeId}, resumeDataCopy, {new: true})
 
